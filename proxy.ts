@@ -37,37 +37,26 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Only these areas require login.
+  // Everything else — homepage, public profiles,
+  // collaboration forms, images, CSS, JS, etc. — remains public.
+
   const pathname = request.nextUrl.pathname;
 
-  // ---------------------------------------------------------
-  // PUBLIC ROUTES
-  // ---------------------------------------------------------
+  const protectedRoute =
+    pathname.startsWith("/influencers") ||
+    pathname.startsWith("/collaboration-requests");
 
-  // Login page
-  if (pathname === "/login") {
-    if (user) {
-      return NextResponse.redirect(
-        new URL("/", request.url)
-      );
-    }
-
-    return response;
-  }
-
-  // Public influencer profiles
-  if (
-    pathname.startsWith("/profile/")
-  ) {
-    return response;
-  }
-
-  // ---------------------------------------------------------
-  // PROTECTED ROUTES
-  // ---------------------------------------------------------
-
-  if (!user) {
+  if (protectedRoute && !user) {
     return NextResponse.redirect(
       new URL("/login", request.url)
+    );
+  }
+
+  // Logged-in users visiting /login can go to homepage.
+  if (pathname === "/login" && user) {
+    return NextResponse.redirect(
+      new URL("/", request.url)
     );
   }
 
@@ -76,6 +65,8 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/influencers/:path*",
+    "/collaboration-requests/:path*",
+    "/login",
   ],
-}
+};
