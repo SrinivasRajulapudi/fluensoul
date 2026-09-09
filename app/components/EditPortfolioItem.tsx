@@ -39,11 +39,10 @@ export default function EditPortfolioItem({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-5 backdrop-blur-sm">
-
       <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-7 shadow-2xl sm:p-9">
 
+        {/* HEADER */}
         <div className="flex items-start justify-between gap-5">
-
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-pink-500">
               Portfolio
@@ -65,14 +64,13 @@ export default function EditPortfolioItem({
           >
             ×
           </button>
-
         </div>
 
+        {/* FORM */}
         <form
           action={action}
           className="mt-8 space-y-5"
         >
-
           <input
             type="hidden"
             name="portfolio_id"
@@ -80,9 +78,7 @@ export default function EditPortfolioItem({
           />
 
           {/* TITLE */}
-
           <div>
-
             <label className="mb-2 block text-sm font-semibold text-gray-700">
               Work Title *
             </label>
@@ -92,16 +88,12 @@ export default function EditPortfolioItem({
               type="text"
               required
               defaultValue={item.title}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
             />
-
           </div>
 
-
           {/* BRAND */}
-
           <div>
-
             <label className="mb-2 block text-sm font-semibold text-gray-700">
               Brand Name
             </label>
@@ -111,16 +103,12 @@ export default function EditPortfolioItem({
               type="text"
               defaultValue={item.brand_name ?? ""}
               placeholder="Brand / Company"
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
             />
-
           </div>
 
-
           {/* DESCRIPTION */}
-
           <div>
-
             <label className="mb-2 block text-sm font-semibold text-gray-700">
               Description
             </label>
@@ -130,16 +118,12 @@ export default function EditPortfolioItem({
               rows={5}
               defaultValue={item.description ?? ""}
               placeholder="Describe the campaign or work..."
-              className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
+              className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
             />
-
           </div>
 
-
           {/* IMAGE URL */}
-
           <div>
-
             <label className="mb-2 block text-sm font-semibold text-gray-700">
               Image URL
             </label>
@@ -149,7 +133,7 @@ export default function EditPortfolioItem({
               type="url"
               defaultValue={item.image_url ?? ""}
               placeholder="https://..."
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
             />
 
             {item.image_url && (
@@ -161,14 +145,10 @@ export default function EditPortfolioItem({
                 />
               </div>
             )}
-
           </div>
 
-
           {/* CONTENT URL */}
-
           <div>
-
             <label className="mb-2 block text-sm font-semibold text-gray-700">
               Content / Campaign URL
             </label>
@@ -178,16 +158,12 @@ export default function EditPortfolioItem({
               type="url"
               defaultValue={item.content_url ?? ""}
               placeholder="https://instagram.com/..."
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
             />
-
           </div>
 
-
           {/* DATE */}
-
           <div>
-
             <label className="mb-2 block text-sm font-semibold text-gray-700">
               Work Date
             </label>
@@ -196,18 +172,15 @@ export default function EditPortfolioItem({
               name="work_date"
               type="date"
               defaultValue={item.work_date ?? ""}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-100"
             />
-
           </div>
 
-
           {/* OPTIONS */}
-
           <div className="grid gap-4 sm:grid-cols-2">
 
+            {/* FEATURED */}
             <label className="flex cursor-pointer items-center gap-3 rounded-2xl bg-gray-50 p-5">
-
               <input
                 type="checkbox"
                 name="is_featured"
@@ -224,12 +197,10 @@ export default function EditPortfolioItem({
                   Show in Featured Work.
                 </p>
               </div>
-
             </label>
 
-
+            {/* PUBLISHED */}
             <label className="flex cursor-pointer items-center gap-3 rounded-2xl bg-gray-50 p-5">
-
               <input
                 type="checkbox"
                 name="is_active"
@@ -246,14 +217,11 @@ export default function EditPortfolioItem({
                   Visible publicly.
                 </p>
               </div>
-
             </label>
 
           </div>
 
-
           {/* ACTIONS */}
-
           <div className="flex flex-col-reverse gap-3 border-t border-gray-100 pt-6 sm:flex-row sm:justify-end">
 
             <button
@@ -272,11 +240,8 @@ export default function EditPortfolioItem({
             </button>
 
           </div>
-
         </form>
-
       </div>
-
     </div>
   );
 }

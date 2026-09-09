@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "../../../lib/server";
+import PremiumPublicProfile from "./premium/PremiumPublicProfile";
+import SocialPlatformIcon from "../../components/SocialPlatformIcon";
+import FluenSoulLogo from "../../components/FluenSoulLogo";
 
 type PageProps = {
   params: Promise<{ username: string }>;
@@ -10,6 +13,8 @@ type SocialLink = {
   id: string;
   platform: string;
   url: string;
+  platform_name: string | null;
+  logo_url: string | null;
   display_order: number;
   is_active: boolean;
 };
@@ -84,7 +89,7 @@ export default async function PublicProfile({
   } = await supabase
     .from("influencer_social_links")
     .select(
-      "id, platform, url, display_order, is_active"
+      "id, platform, platform_name, url, logo_url, display_order, is_active"
     )
     .eq("influencer_id", influencer.id)
     .eq("is_active", true)
@@ -127,6 +132,23 @@ export default async function PublicProfile({
     `/profile/${encodeURIComponent(
       influencer.username
     )}/collaborate`;
+    // =========================================================
+// PREMIUM PROFILE
+// =========================================================
+
+if (
+  influencer.plan === "premium" ||
+  influencer.template === "premium"
+) {
+  return (
+    <PremiumPublicProfile
+      influencer={influencer}
+      links={links}
+      portfolio={portfolio}
+      collaborateUrl={collaborateUrl}
+    />
+  );
+}
 
   // =========================================================
   // FORMAT DATE
@@ -163,9 +185,13 @@ export default async function PublicProfile({
 
           <Link
             href="#top"
-            className="text-sm font-bold uppercase tracking-[0.32em] text-white"
+            aria-label="FluenSoul"
+            className="flex w-fit items-center"
           >
-            Influencer
+            <FluenSoulLogo
+              width={150}
+              className="max-w-[150px] brightness-0 invert sm:max-w-[170px]"
+            />
           </Link>
 
           <div className="hidden items-center gap-9 md:flex">
@@ -503,8 +529,23 @@ export default async function PublicProfile({
 
                         <div className="flex items-start justify-between">
 
-                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#111318] text-xs font-bold text-white">
-                            {initial}
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#111318] text-white">
+                            {link.logo_url ? (
+                              <img
+                                src={link.logo_url}
+                                alt={
+                                  platform === "other"
+                                    ? link.platform_name || "Other Platform"
+                                    : label
+                                }
+                                className="h-7 w-7 rounded-lg object-contain"
+                              />
+                            ) : (
+                              <SocialPlatformIcon
+                                platform={platform}
+                                className="h-6 w-6"
+                              />
+                            )}
                           </div>
 
                           <span className="text-lg text-black/30 transition group-hover:translate-x-1 group-hover:text-black">

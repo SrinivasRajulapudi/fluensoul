@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/server";
+import LogoutButton from "../components/LogoutButton";
+import FluenSoulLogo from "../components/FluenSoulLogo";
 
 export default async function CreatorDashboard() {
   const supabase = await createClient();
@@ -31,7 +33,6 @@ export default async function CreatorDashboard() {
     redirect("/login?error=no_role");
   }
 
-  // Admins should use the admin dashboard
   if (roleRecord.role === "admin") {
     redirect("/");
   }
@@ -64,20 +65,31 @@ export default async function CreatorDashboard() {
     .maybeSingle();
 
   if (error) {
-    console.error("Creator profile loading failed:", error);
+    console.error(
+      "Creator profile loading failed:",
+      error
+    );
   }
 
   // ---------------------------------------------------------
-  // CREATOR HAS NO PROFILE YET
+  // NO PROFILE YET
   // ---------------------------------------------------------
 
   if (!influencer) {
     return (
       <main className="min-h-screen bg-[#f4f5f7] p-6 sm:p-8">
         <div className="mx-auto max-w-5xl">
+
           <header className="mb-10">
+            <div className="mb-8">
+              <FluenSoulLogo
+                width={220}
+                className="max-w-[220px]"
+              />
+            </div>
+
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-pink-500">
-              FluenSoul
+              Creator Platform
             </p>
 
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
@@ -91,6 +103,7 @@ export default async function CreatorDashboard() {
 
           <section className="rounded-3xl bg-white p-8 shadow-sm sm:p-10">
             <div className="max-w-2xl">
+
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-pink-500">
                 Get Started
               </p>
@@ -100,18 +113,21 @@ export default async function CreatorDashboard() {
               </h2>
 
               <p className="mt-3 leading-7 text-gray-500">
-                Your public FluenSoul profile will contain your bio,
-                social links, portfolio and collaboration information.
+                Your public FluenSoul profile will contain your
+                bio, social links, portfolio and collaboration
+                information.
               </p>
 
               <Link
-                href="/influencers/new"
+                href="/creator/profile"
                 className="mt-7 inline-flex rounded-xl bg-gray-900 px-6 py-3 font-semibold text-white transition hover:bg-gray-700"
               >
                 Create Profile
               </Link>
+
             </div>
           </section>
+
         </div>
       </main>
     );
@@ -127,7 +143,8 @@ export default async function CreatorDashboard() {
       count: "exact",
       head: true,
     })
-    .eq("influencer_id", influencer.id);
+    .eq("influencer_id", influencer.id)
+    .eq("is_active", true);
 
   // ---------------------------------------------------------
   // LOAD SOCIAL LINK COUNT
@@ -142,7 +159,7 @@ export default async function CreatorDashboard() {
     .eq("influencer_id", influencer.id);
 
   // ---------------------------------------------------------
-  // LOAD COLLABORATION REQUEST COUNT
+  // LOAD TOTAL COLLABORATION REQUEST COUNT
   // ---------------------------------------------------------
 
   const { count: collaborationCount } = await supabase
@@ -152,6 +169,19 @@ export default async function CreatorDashboard() {
       head: true,
     })
     .eq("influencer_id", influencer.id);
+
+  // ---------------------------------------------------------
+  // LOAD NEW COLLABORATION REQUEST COUNT
+  // ---------------------------------------------------------
+
+  const { count: newCollaborationCount } = await supabase
+    .from("collaboration_requests")
+    .select("*", {
+      count: "exact",
+      head: true,
+    })
+    .eq("influencer_id", influencer.id)
+    .eq("status", "new");
 
   const publicProfileUrl = `/profile/${encodeURIComponent(
     influencer.username
@@ -165,40 +195,61 @@ export default async function CreatorDashboard() {
     <main className="min-h-screen bg-[#f4f5f7] p-6 sm:p-8 lg:p-10">
       <div className="mx-auto max-w-7xl">
 
-        {/* HEADER */}
+        {/* =====================================================
+            HEADER
+        ====================================================== */}
 
         <header className="mb-10">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-pink-500">
-                FluenSoul
-              </p>
+          <div className="flex flex-col gap-6">
 
-              <h1 className="mt-3 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                Creator Dashboard
-              </h1>
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 
-              <p className="mt-3 text-gray-500">
-                Welcome back, {influencer.name}.
-              </p>
+              <div>
+                <FluenSoulLogo
+                  width={220}
+                  className="max-w-[220px]"
+                />
+
+                <p className="mt-6 text-sm font-semibold uppercase tracking-[0.25em] text-pink-500">
+                  Creator Platform
+                </p>
+
+                <h1 className="mt-3 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                  Creator Dashboard
+                </h1>
+
+                <p className="mt-3 text-gray-500">
+                  Welcome back, {influencer.name}.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={publicProfileUrl}
+                  target="_blank"
+                  className="w-fit rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
+                >
+                  View Public Profile ↗
+                </Link>
+
+                <LogoutButton />
+              </div>
+
             </div>
 
-            <Link
-              href={publicProfileUrl}
-              target="_blank"
-              className="w-fit rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
-            >
-              View Public Profile ↗
-            </Link>
           </div>
         </header>
 
-        {/* PROFILE OVERVIEW */}
+        {/* =====================================================
+            PROFILE OVERVIEW
+        ====================================================== */}
 
         <section className="mb-8 rounded-3xl bg-white p-6 shadow-sm sm:p-8">
+
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
 
             <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gray-100">
+
               {influencer.hero_image_url ? (
                 <img
                   src={influencer.hero_image_url}
@@ -210,10 +261,13 @@ export default async function CreatorDashboard() {
                   {influencer.name.charAt(0)}
                 </span>
               )}
+
             </div>
 
             <div className="flex-1">
+
               <div className="flex flex-wrap items-center gap-3">
+
                 <h2 className="text-2xl font-bold text-gray-900">
                   {influencer.name}
                 </h2>
@@ -221,6 +275,7 @@ export default async function CreatorDashboard() {
                 <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-600">
                   {influencer.plan}
                 </span>
+
               </div>
 
               <p className="mt-1 text-gray-500">
@@ -232,22 +287,32 @@ export default async function CreatorDashboard() {
                   {influencer.tagline}
                 </p>
               )}
+
             </div>
 
             <Link
-              href={`/influencers/${influencer.id}`}
+              href="/creator/profile"
               className="rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
             >
               Edit Profile
             </Link>
+
           </div>
+
         </section>
 
-        {/* STATS */}
+        {/* =====================================================
+            STATS
+        ====================================================== */}
 
         <section className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
-          <div className="rounded-3xl bg-white p-6 shadow-sm">
+          {/* PORTFOLIO */}
+
+          <Link
+            href="/creator/portfolio"
+            className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
             <p className="text-sm text-gray-500">
               Portfolio
             </p>
@@ -259,9 +324,14 @@ export default async function CreatorDashboard() {
             <p className="mt-1 text-sm text-gray-400">
               Published works
             </p>
-          </div>
+          </Link>
 
-          <div className="rounded-3xl bg-white p-6 shadow-sm">
+          {/* SOCIAL */}
+
+          <Link
+            href="/creator/profile"
+            className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
             <p className="text-sm text-gray-500">
               Social Links
             </p>
@@ -273,42 +343,66 @@ export default async function CreatorDashboard() {
             <p className="mt-1 text-sm text-gray-400">
               Connected platforms
             </p>
-          </div>
+          </Link>
 
-          <div className="rounded-3xl bg-white p-6 shadow-sm">
+          {/* COLLABORATIONS */}
+
+          <Link
+            href="/creator/collaborations"
+            className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
             <p className="text-sm text-gray-500">
               Collaborations
             </p>
 
-            <p className="mt-2 text-3xl font-bold text-gray-900">
-              {collaborationCount ?? 0}
-            </p>
+            <div className="mt-2 flex items-center gap-3">
+              <p className="text-3xl font-bold text-gray-900">
+                {collaborationCount ?? 0}
+              </p>
+
+              {(newCollaborationCount ?? 0) > 0 && (
+                <span className="rounded-full bg-pink-100 px-2.5 py-1 text-xs font-bold text-pink-600">
+                  {newCollaborationCount} new
+                </span>
+              )}
+            </div>
 
             <p className="mt-1 text-sm text-gray-400">
               Requests received
             </p>
-          </div>
+          </Link>
 
-          <div className="rounded-3xl bg-white p-6 shadow-sm">
+          {/* PROFILE STATUS */}
+
+          <Link
+            href="/creator/profile"
+            className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
             <p className="text-sm text-gray-500">
               Profile Status
             </p>
 
             <p className="mt-2 text-2xl font-bold text-gray-900">
-              {influencer.is_active ? "Live" : "Hidden"}
+              {influencer.is_active
+                ? "Live"
+                : "Hidden"}
             </p>
 
             <p className="mt-1 text-sm text-gray-400">
               Public visibility
             </p>
-          </div>
+          </Link>
 
         </section>
 
-        {/* CREATOR TOOLS */}
+        {/* =====================================================
+            CREATOR TOOLS
+        ====================================================== */}
 
         <section>
+
           <div className="mb-5">
+
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-pink-500">
               Manage
             </p>
@@ -316,12 +410,15 @@ export default async function CreatorDashboard() {
             <h2 className="mt-2 text-2xl font-bold text-gray-900">
               Your Creator Tools
             </h2>
+
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+            {/* PROFILE */}
 
             <Link
-              href={`/influencers/${influencer.id}`}
+              href="/creator/profile"
               className="group rounded-3xl bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <p className="text-sm font-semibold text-pink-500">
@@ -333,7 +430,8 @@ export default async function CreatorDashboard() {
               </h3>
 
               <p className="mt-2 text-sm leading-6 text-gray-500">
-                Update your name, bio, tagline, image and profile details.
+                Update your name, bio, tagline, image and
+                profile details.
               </p>
 
               <span className="mt-5 inline-block text-sm font-semibold text-gray-900">
@@ -341,8 +439,10 @@ export default async function CreatorDashboard() {
               </span>
             </Link>
 
+            {/* PORTFOLIO */}
+
             <Link
-              href={`/influencers/${influencer.id}/portfolio`}
+              href="/creator/portfolio"
               className="group rounded-3xl bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <p className="text-sm font-semibold text-pink-500">
@@ -354,13 +454,50 @@ export default async function CreatorDashboard() {
               </h3>
 
               <p className="mt-2 text-sm leading-6 text-gray-500">
-                Add campaigns, brand work, images and featured projects.
+                Add campaigns, brand work, images and
+                featured projects.
               </p>
 
               <span className="mt-5 inline-block text-sm font-semibold text-gray-900">
                 Manage →
               </span>
             </Link>
+
+            {/* COLLABORATIONS */}
+
+            <Link
+              href="/creator/collaborations"
+              className="group rounded-3xl bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            >
+              <div className="flex items-start justify-between gap-3">
+
+                <p className="text-sm font-semibold text-pink-500">
+                  COLLABORATIONS
+                </p>
+
+                {(newCollaborationCount ?? 0) > 0 && (
+                  <span className="rounded-full bg-pink-100 px-2.5 py-1 text-xs font-bold text-pink-600">
+                    {newCollaborationCount} new
+                  </span>
+                )}
+
+              </div>
+
+              <h3 className="mt-3 text-xl font-bold text-gray-900">
+                Collaboration Requests
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-gray-500">
+                Review brand opportunities and manage
+                incoming collaboration requests.
+              </p>
+
+              <span className="mt-5 inline-block text-sm font-semibold text-gray-900">
+                View Requests →
+              </span>
+            </Link>
+
+            {/* PUBLIC PROFILE */}
 
             <Link
               href={publicProfileUrl}
@@ -376,7 +513,8 @@ export default async function CreatorDashboard() {
               </h3>
 
               <p className="mt-2 text-sm leading-6 text-gray-500">
-                See exactly how brands and visitors see your profile.
+                See exactly how brands and visitors see
+                your profile.
               </p>
 
               <span className="mt-5 inline-block text-sm font-semibold text-gray-900">
@@ -385,14 +523,19 @@ export default async function CreatorDashboard() {
             </Link>
 
           </div>
+
         </section>
 
-        {/* PLAN */}
+        {/* =====================================================
+            PLAN
+        ====================================================== */}
 
         <section className="mt-8 rounded-3xl bg-gray-900 p-7 text-white sm:p-8">
+
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
 
             <div>
+
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-pink-300">
                 Current Plan
               </p>
@@ -404,22 +547,33 @@ export default async function CreatorDashboard() {
               </h2>
 
               <p className="mt-2 max-w-xl text-sm leading-6 text-gray-300">
-                Your public profile currently uses the{" "}
-                <strong>{influencer.template}</strong> template.
+                Your FluenSoul profile is currently on the{" "}
+                <strong>
+                  {influencer.plan === "premium"
+                    ? "Premium Plan"
+                    : "Basic Plan"}
+                </strong>
+                .
               </p>
+
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm">
+
               <p className="text-gray-400">
-                Template
+                Plan
               </p>
 
-              <p className="mt-1 font-semibold capitalize">
-                {influencer.template}
+              <p className="mt-1 font-semibold">
+                {influencer.plan === "premium"
+                  ? "Premium Plan"
+                  : "Basic Plan"}
               </p>
+
             </div>
 
           </div>
+
         </section>
 
       </div>

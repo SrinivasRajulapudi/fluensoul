@@ -149,7 +149,7 @@ influencer_id: influencerId,
     );
 
     redirect(
-      `/profile/${influencerUsername}/collaborate?success=true`
+      `/profile/${influencerUsername}/collaborate/success`
     );
   }
 
