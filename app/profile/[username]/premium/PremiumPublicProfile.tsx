@@ -312,7 +312,7 @@ export default function PremiumPublicProfile({
       ========================================================== */}
 
       <section
-        className="px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+        className="px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20"
         style={{
           backgroundColor,
         }}
@@ -397,7 +397,7 @@ export default function PremiumPublicProfile({
 
       <section
         id="about"
-        className="border-t px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-36"
+        className="border-t px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20"
         style={{
           backgroundColor,
           borderColor: `${textColor}1A`,
@@ -428,7 +428,7 @@ export default function PremiumPublicProfile({
               )}
 
               <div
-                className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t pt-5"
+                className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t pt-5"
                 style={{
                   borderColor: `${textColor}1A`,
                 }}
@@ -456,7 +456,7 @@ export default function PremiumPublicProfile({
 
       <section
         id="social"
-        className="border-t px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+        className="border-t px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20"
         style={{
           backgroundColor,
           borderColor: `${textColor}1A`,
@@ -488,7 +488,7 @@ export default function PremiumPublicProfile({
           </div>
 
           {links.length > 0 ? (
-            <div className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {links.map((link) => {
                 const platform = link.platform.toLowerCase();
 
@@ -552,7 +552,7 @@ export default function PremiumPublicProfile({
             </div>
           ) : (
             <div
-              className="mt-14 border-t py-7"
+              className="mt-10 border-t py-6"
               style={{
                 borderColor: `${textColor}1A`,
               }}
@@ -571,7 +571,7 @@ export default function PremiumPublicProfile({
 
       <section
         id="work"
-        className="border-t px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-36"
+        className="border-t px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20"
         style={{
           backgroundColor,
           borderColor: `${textColor}1A`,
@@ -603,7 +603,7 @@ export default function PremiumPublicProfile({
           </div>
 
           {portfolio.length > 0 ? (
-            <div className="mt-14 columns-1 gap-6 md:columns-2">
+            <div className="mt-10 columns-1 gap-6 md:columns-2">
               {portfolio.map((item) => {
                 const workDate = formatWorkDate(item.work_date);
 
@@ -715,7 +715,7 @@ export default function PremiumPublicProfile({
             </div>
           ) : (
             <div
-              className="mt-14 border-t py-8"
+              className="mt-10 border-t py-6"
               style={{
                 borderColor: `${textColor}1A`,
               }}
@@ -734,7 +734,7 @@ export default function PremiumPublicProfile({
 
       <section
         id="contact"
-        className="relative overflow-hidden border-t px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44"
+        className="relative overflow-hidden border-t px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24"
         style={{
           backgroundColor,
           borderColor: `${textColor}1A`,
@@ -757,18 +757,18 @@ export default function PremiumPublicProfile({
             Let&apos;s Work Together
           </p>
 
-          <h2 className="mt-7 text-6xl font-black leading-[0.82] tracking-[-0.075em] sm:text-8xl lg:text-[9rem]">
+          <h2 className="mt-5 text-6xl font-black leading-[0.82] tracking-[-0.075em] sm:text-8xl lg:text-[9rem]">
             Have an idea?
           </h2>
 
-          <p className="mx-auto mt-8 max-w-xl text-base leading-7 opacity-45 sm:text-lg">
+          <p className="mx-auto mt-6 max-w-xl text-base leading-7 opacity-45 sm:text-lg">
             Have a campaign, product launch or creative project in
             mind? Let&apos;s create something meaningful together.
           </p>
 
           <Link
             href={collaborateUrl}
-            className="mt-10 inline-flex items-center gap-3 rounded-full px-8 py-4 text-xs font-bold text-white transition duration-300 hover:-translate-y-1"
+            className="mt-8 inline-flex items-center gap-3 rounded-full px-8 py-4 text-xs font-bold text-white transition duration-300 hover:-translate-y-1"
             style={{
               backgroundColor: textColor,
             }}
