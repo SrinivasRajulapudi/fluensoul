@@ -30,7 +30,7 @@ async function getFeaturedCreators() {
     )
     .eq("is_active", true)
     .order("created_at", { ascending: false })
-    .limit(6);
+    .limit(8);
 
   if (error) {
     console.error("Influencers loading failed:", error);
@@ -83,7 +83,7 @@ export default async function Home() {
               href="#creators"
               className="transition hover:text-black"
             >
-              Our Influencers
+              Our Family
             </a>
 
             <a
@@ -519,17 +519,17 @@ export default async function Home() {
 
 
       {/* =====================================================
-          OUR INFLUENCERS
+          OUR FAMILY
       ====================================================== */}
 
       <section
         id="creators"
-        className="border-b border-black/5 bg-white px-5 py-20 sm:px-8 sm:py-28"
+        className="border-b border-black/5 bg-white px-5 py-16 sm:px-8 sm:py-28"
       >
 
         <div className="mx-auto max-w-7xl">
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
 
             <div>
 
@@ -537,15 +537,16 @@ export default async function Home() {
                 Creator Network
               </p>
 
-              <h2 className="mt-4 font-serif text-4xl tracking-tight sm:text-5xl">
-                Our Influencers
+              <h2 className="mt-3 font-serif text-4xl tracking-tight sm:mt-4 sm:text-5xl">
+                Our Family
               </h2>
 
             </div>
 
 
             <p className="max-w-md text-sm leading-6 text-black/50 sm:text-right">
-              Explore creators who are part of the FluenSoul network.
+              Meet some of the creators who are part of the FluenSoul
+              family.
             </p>
 
           </div>
@@ -553,28 +554,62 @@ export default async function Home() {
 
           {creators.length > 0 ? (
 
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+              className="
+                mt-8
+                grid
+                grid-cols-2
+                gap-3
+                sm:mt-12
+                sm:grid-cols-2
+                sm:gap-5
+                lg:grid-cols-3
+              "
+            >
 
               {creators.map((creator) => (
 
                 /*
                  * DISPLAY ONLY
-                 * Influencer cards are intentionally NOT clickable.
+                 * Family cards are intentionally NOT clickable.
                  */
 
                 <div
                   key={creator.id}
-                  className="overflow-hidden rounded-3xl border border-black/10 bg-[#faf9f6]"
+                  className="
+                    overflow-hidden
+                    rounded-2xl
+                    border
+                    border-black/10
+                    bg-[#faf9f6]
+                    sm:rounded-3xl
+                  "
                 >
 
-                  <div className="aspect-[4/3] overflow-hidden bg-[#e9e4dd]">
+                  {/* PROFILE IMAGE */}
+
+                  <div
+                    className="
+                      aspect-square
+                      overflow-hidden
+                      bg-[#e9e4dd]
+                      sm:aspect-[4/3]
+                    "
+                  >
 
                     {creator.hero_image_url ? (
 
                       <img
                         src={creator.hero_image_url}
                         alt={creator.name}
-                        className="h-full w-full object-cover"
+                        className="
+                          h-full
+                          w-full
+                          object-cover
+                          transition-transform
+                          duration-500
+                          sm:hover:scale-105
+                        "
                       />
 
                     ) : (
@@ -592,21 +627,55 @@ export default async function Home() {
                   </div>
 
 
-                  <div className="p-5">
+                  {/* PROFILE INFORMATION */}
 
-                    <h3 className="text-lg font-semibold">
+                  <div className="p-3 sm:p-5">
+
+                    <h3
+                      className="
+                        truncate
+                        text-sm
+                        font-semibold
+                        sm:text-lg
+                      "
+                    >
                       {creator.name}
                     </h3>
 
 
-                    <p className="mt-1 text-sm text-black/50">
+                    {/* TAGLINE — HIDDEN ON MOBILE */}
+
+                    <p
+                      className="
+                        mt-1
+                        hidden
+                        truncate
+                        text-sm
+                        text-black/50
+                        sm:block
+                      "
+                    >
                       {creator.tagline || "FluenSoul Creator"}
                     </p>
 
 
+                    {/* FOLLOWERS */}
+
                     {creator.followers && (
 
-                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.15em] text-black/40">
+                      <p
+                        className="
+                          mt-1.5
+                          text-[10px]
+                          font-semibold
+                          uppercase
+                          tracking-[0.12em]
+                          text-black/40
+                          sm:mt-5
+                          sm:text-xs
+                          sm:tracking-[0.15em]
+                        "
+                      >
                         {formatFollowers(creator.followers)} Followers
                       </p>
 
@@ -622,14 +691,14 @@ export default async function Home() {
 
           ) : (
 
-            <div className="mt-12 rounded-3xl border border-dashed border-black/15 bg-[#faf9f6] px-6 py-16 text-center">
+            <div className="mt-10 rounded-3xl border border-dashed border-black/15 bg-[#faf9f6] px-6 py-16 text-center">
 
               <p className="font-serif text-2xl">
                 Creator profiles coming soon.
               </p>
 
               <p className="mt-3 text-sm text-black/50">
-                FluenSoul creators will appear here as the network grows.
+                FluenSoul creators will appear here as the family grows.
               </p>
 
             </div>
@@ -893,7 +962,7 @@ export default async function Home() {
               href="#creators"
               className="hover:text-black"
             >
-              Our Influencers
+              Our Family
             </a>
 
 
